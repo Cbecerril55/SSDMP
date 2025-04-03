@@ -43,8 +43,19 @@ const crearReporteExtravio = async (req, res) => {
     }
 };
 
+const obtenerReportesExtravio = async (req, res) => {
+    try {
+        const reportes = await ReporteExtravio.findAll();
+        res.json(reportes);
+    } catch (error) {
+        console.error('Error al obtener reportes de extravío:', error);
+        res.status(500).json({ error: 'Error al obtener reportes de extravío' });
+    }
+};
+
 
 module.exports = {
     crearReporteHallazgo,
-    crearReporteExtravio // si ya lo tienes aquí, mantenlo exportado también
+    crearReporteExtravio,
+    obtenerReportesExtravio
 };
