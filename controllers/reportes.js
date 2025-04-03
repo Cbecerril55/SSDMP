@@ -1,5 +1,6 @@
 const { db } = require('../db/db');
 const { QueryTypes } = require('sequelize');
+const ReporteExtravio = require('../models/reporteExtravio');
 
 const crearReporteHallazgo = async (req, res) => {
     const { reporte_id, fecha_hallazgo, ubicacion, usuario_id } = req.body;
@@ -24,8 +25,26 @@ const crearReporteHallazgo = async (req, res) => {
     }
 };
 
+const crearReporteExtravio = async (req, res) => {
+    try {
+        const { mascota_id, descripcion, ubicacion, usuario_id } = req.body;
+
+        const nuevoReporte = await ReporteExtravio.create({
+            mascota_id,
+            descripcion,
+            ubicacion,
+            usuario_id
+        });
+
+        res.status(201).json(nuevoReporte);
+    } catch (error) {
+        console.error('Error al crear reporte de extravío:', error);
+        res.status(500).json({ error: 'Error al crear reporte de extravío' });
+    }
+};
+
 
 module.exports = {
     crearReporteHallazgo,
-    //crearReporteExtravio // si ya lo tienes aquí, mantenlo exportado también
+    crearReporteExtravio // si ya lo tienes aquí, mantenlo exportado también
 };
