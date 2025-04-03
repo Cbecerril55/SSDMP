@@ -8,9 +8,10 @@ class Server {
         this.app = express();
         this.port = process.env.PORT || 3001;
         this.paths = {
-           // usuarios: '/usuarios',
+            usuarios: '/usuarios',
             mascotas: '/mascotas',
-            //reportes: '/reportes',
+            reportes: '/reportes',
+            consultas: '/consultas'
         };
 
         // Connect to the database
@@ -44,9 +45,10 @@ class Server {
         this.app.use(express.static('public'));
     }
     routes() {
-       // this.app.use(this.paths.usuarios, require('../routes/usuarios.js'));
+        this.app.use(this.paths.usuarios, require('../routes/usuarios.js'));
         this.app.use(this.paths.mascotas, require('../routes/mascotas.js'));
-        ///his.app.use(this.paths.reportes, require('../routes/reportes.js'));
+        this.app.use(this.paths.reportes, require('../routes/reportes.js'));
+        this.app.use(this.paths.consultas, require('../routes/consultas'));
     }
     listen() {
         this.app.listen(this.port, () => {
