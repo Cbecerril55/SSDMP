@@ -8,6 +8,7 @@ const Mascota = db.define('Mascota', {
     color: { type: DataTypes.STRING },
     edad: { type: DataTypes.INTEGER },
     estado: { type: DataTypes.ENUM('perdido', 'encontrado'), defaultValue: 'perdido' },
+    usuario_id: { type: DataTypes.INTEGER, allowNull: false },
     ubicacion: { type: DataTypes.STRING },
 }, {
     tableName: 'Mascotas',
