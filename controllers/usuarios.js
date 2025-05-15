@@ -76,7 +76,12 @@ const loginUsuario = async (req, res) => {
       { expiresIn: '2h' }
     );
 
-    res.json({ mensaje: 'Inicio de sesión exitoso', token });
+    // Incluir el usuario_id en la respuesta
+    res.json({
+      mensaje: 'Inicio de sesión exitoso',
+      token,
+      usuario_id: usuario.usuario_id // Agregado aquí
+    });
 
   } catch (error) {
     console.error('Error al iniciar sesión:', error);
