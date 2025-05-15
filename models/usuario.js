@@ -24,6 +24,10 @@ const Usuario = db.define('Usuario', {
         type: DataTypes.STRING(100),
         allowNull: false
     },
+    password:{
+        type: DataTypes.STRING(255),
+        allowNull: false
+    },
     fecha_registro: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW

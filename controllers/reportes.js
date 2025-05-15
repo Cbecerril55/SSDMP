@@ -1,6 +1,7 @@
 const { db } = require('../db/db');
 const { QueryTypes } = require('sequelize');
 const ReporteExtravio = require('../models/reporteExtravio');
+const ReporteHallazgo = require('../models/reportesHallazgos');
 
 const crearReporteHallazgo = async (req, res) => {
     const { reporte_id, fecha_hallazgo, ubicacion, usuario_id } = req.body;
@@ -53,9 +54,43 @@ const obtenerReportesExtravio = async (req, res) => {
     }
 };
 
+const registrarReporteHallazgoTx = async (req, res) => {
+    const { reporte_id, usuario_id, ubicacion, comentario } = req.query;
+
+    const transaction = await db.transaction();
+    try {
+        if (!reporte_id || !usuario_id || !ubicacion) {
+            return res.status(400).json({ error: 'Faltan parámetros requeridos' });
+        }
+
+        const [resultado] = await db.query(
+            `INSERT INTO Reportes_Hallazgo (reporte_id, usuario_id, ubicacion, comentario)
+             VALUES (?, ?, ?, ?)`,
+            {
+                replacements: [reporte_id, usuario_id, ubicacion, comentario || null],
+                type: QueryTypes.INSERT,
+                transaction
+            }
+        );
+
+        await transaction.commit();
+
+        res.status(201).json({
+            mensaje: 'Reporte de hallazgo registrado con transacción',
+            hallazgo_id: resultado
+        });
+
+    } catch (error) {
+        await transaction.rollback();
+        console.error('Error en transacción de hallazgo:', error);
+        res.status(500).json({ error: 'Error al registrar hallazgo con transacción' });
+    }
+};
+
 
 module.exports = {
     crearReporteHallazgo,
     crearReporteExtravio,
-    obtenerReportesExtravio
+    obtenerReportesExtravio,
+    registrarReporteHallazgoTx,
 };
