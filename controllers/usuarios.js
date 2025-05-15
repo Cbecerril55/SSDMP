@@ -138,9 +138,43 @@ const eliminarUsuario = async (req, res) => {
   }
 };
 
+const actualizarUsuario = async (req, res) => {
+  try {
+    const usuario_id = req.params.id;
+    const { nombre, email, telefono, ubicacion, password } = req.body;
+
+    // Busca el usuario en la base de datos
+    const usuario = await Usuario.findByPk(usuario_id);
+
+    if (!usuario) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    // Actualiza los datos del usuario
+    if (nombre) usuario.nombre = nombre;
+    if (email) usuario.email = email;
+    if (telefono) usuario.telefono = telefono;
+    if (ubicacion) usuario.ubicacion = ubicacion;
+
+    // Si se pasa una contraseña, se encripta antes de guardar
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      usuario.password = await bcrypt.hash(password, salt);
+    }
+
+    await usuario.save();
+
+    res.json({ mensaje: 'Usuario actualizado correctamente' });
+  } catch (error) {
+    console.error('Error al actualizar usuario:', error);
+    res.status(500).json({ error: 'Error al actualizar usuario' });
+  }
+};
+
 module.exports = {
   crearUsuario,
   obtenerUsuarios,
   loginUsuario,
   eliminarUsuario,
+  actualizarUsuario,
 };
