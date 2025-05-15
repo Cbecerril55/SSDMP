@@ -11,7 +11,8 @@ class Server {
             usuarios: '/usuarios',
             mascotas: '/mascotas',
             reportes: '/reportes',
-            consultas: '/consultas'
+            consultas: '/consultas',
+            notificaciones: '/notificaciones',
         };
 
         // Connect to the database
@@ -49,6 +50,7 @@ class Server {
         this.app.use(this.paths.mascotas, require('../routes/mascotas.js'));
         this.app.use(this.paths.reportes, require('../routes/reportes.js'));
         this.app.use(this.paths.consultas, require('../routes/consultas'));
+        this.app.use(this.paths.notificaciones, require('../routes/notificaciones.js'));
     }
     listen() {
         this.app.listen(this.port, () => {
